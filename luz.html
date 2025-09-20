@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental- Equilíbrio Químico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        /* Fundo de nebulosa animada */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            animation: nebula 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes nebula {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% { 
+                transform: scale(1.1) rotate(180deg);
+                opacity: 0.9;
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .title {
+            text-align: center;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff, #00ff88);
+            background-size: 200% 200%;
+            animation: titleShimmer 3s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 40px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            letter-spacing: 2px;
+        }
+
+        @keyframes titleShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .energy-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .energy-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00d4ff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00d4ff;
+            animation: energyFloat 8s linear infinite;
+        }
+
+        .energy-particle:nth-child(odd) {
+            background: #ff00ff;
+            box-shadow: 0 0 10px #ff00ff;
+            animation-duration: 12s;
+        }
+
+        .energy-particle:nth-child(3n) {
+            background: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+            animation-duration: 10s;
+        }
+
+        @keyframes energyFloat {
+            0% { 
+                transform: translateY(100vh) translateX(0px) scale(0);
+                opacity: 0;
+            }
+            10% { 
+                opacity: 1;
+                transform: translateY(90vh) translateX(10px) scale(1);
+            }
+            90% { 
+                opacity: 1;
+                transform: translateY(10vh) translateX(-10px) scale(1);
+            }
+            100% { 
+                transform: translateY(0vh) translateX(0px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .mind-map {
+            position: relative;
+            width: 100%;
+            height: 900px;
+            margin: 0 auto;
+        }
+
+        .orbital-system {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            animation: systemRotate 60s linear infinite;
+        }
+
+        @keyframes systemRotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .central-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            color: #00d4ff;
+            padding: 30px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            width: 220px;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            border: 3px solid #00d4ff;
+            box-shadow: 
+                0 0 30px rgba(0, 212, 255, 0.5),
+                inset 0 0 30px rgba(0, 212, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .central-node::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            animation: dnaRotate 4s linear infinite;
+        }
+
+        .central-node::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(-45deg, transparent, rgba(255, 0, 255, 0.1), transparent);
+            animation: dnaRotate 4s linear infinite reverse;
+        }
+
+        @keyframes dnaRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .orbit {
+            position: absolute;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 50%;
+            animation: orbitRotate 30s linear infinite;
+        }
+
+        .orbit-1 {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .orbit-2 {
+            width: 600px;
+            height: 600px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 45s;
+            animation-direction: reverse;
+        }
+
+        @keyframes orbitRotate {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .branch {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 
+                0 8px 32px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+            cursor: pointer;
+            max-width: 300px;
+            color: #ffffff;
+            transform-style: preserve-3d;
+        }
+
+        .branch:hover {
+            transform: translateZ(20px) scale(1.05);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.4),
+                0 0 30px rgba(0, 212, 255, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            background: linear-gradient(135deg, rgba(0, 212, 255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+        }
+
+        .branch h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .branch p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #e0e0e0;
+        }
+
+        .icon {
+            font-size: 1.8rem;
+            filter: drop-shadow(0 0 10px currentColor);
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Posicionamento orbital dos ramos */
+        .conceito {
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 4px solid #3498db;
+        }
+
+        .constante {
+            top: 25%;
+            right: 5%;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .le-chatelier {
+            bottom: 25%;
+            right: 5%;
+            border-left: 4px solid #f39c12;
+        }
+
+        .expressao {
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 4px solid #9b59b6;
+        }
+
+        .aplicacoes {
+            top: 25%;
+            left: 5%;
+            border-left: 4px solid #27ae60;
+        }
+
+        .graficos {
+            bottom: 25%;
+            left: 5%;
+            border-left: 4px solid #e67e22;
+        }
+
+        .formula {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            margin: 8px 0;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+        }
+
+        .graph-button {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            color: white;
+            border: none;
+            padding: 20px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.3),
+                0 0 20px rgba(0, 212, 255, 0.4);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            border: 2px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            animation: buttonFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes buttonFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .graph-button:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.4),
+                0 0 40px rgba(0, 212, 255, 0.6);
+        }
+
+        .graph-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .graph-content {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+            padding: 40px;
+            border-radius: 25px;
+            max-width: 900px;
+            width: 95%;
+            position: relative;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px);
+            color: white;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: none;
+            border: none;
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: #00d4ff;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 20px #00d4ff;
+        }
+
+        .graph-container {
+            width: 100%;
+            height: 450px;
+            margin: 25px 0;
+            position: relative;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(255, 0, 255, 0.05) 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .axis {
+            position: absolute;
+            background: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .x-axis {
+            bottom: 60px;
+            left: 60px;
+            right: 40px;
+            height: 3px;
+        }
+
+        .y-axis {
+            left: 60px;
+            top: 40px;
+            bottom: 60px;
+            width: 3px;
+        }
+
+        .curve {
+            stroke-width: 4;
+            fill: none;
+            filter: drop-shadow(0 0 5px currentColor);
+        }
+
+        .curve-reagent {
+            stroke: #3498db;
+        }
+
+        .curve-product {
+            stroke: #27ae60;
+        }
+
+        .equilibrium-line {
+            position: absolute;
+            border-left: 3px dashed #f39c12;
+            height: 350px;
+            left: 420px;
+            top: 40px;
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+        }
+
+        .label {
+            position: absolute;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .mind-map {
+                height: 1400px;
+            }
+            
+            .orbital-system {
+                width: 600px;
+                height: 600px;
+            }
+            
+            .branch {
+                max-width: 250px;
+                font-size: 0.9rem;
+            }
+            
+            .central-node {
+                width: 180px;
+                height: 180px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas de energia -->
+    <div class="energy-particles">
+        <div class="energy-particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="energy-particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="energy-particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="energy-particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="energy-particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="energy-particle" style="left: 60%; animation-delay: 1.5s;"></div>
+        <div class="energy-particle" style="left: 70%; animation-delay: 2.5s;"></div>
+        <div class="energy-particle" style="left: 80%; animation-delay: 3.5s;"></div>
+        <div class="energy-particle" style="left: 90%; animation-delay: 0.5s;"></div>
+    </div>
+
+    <div class="container">
+        <h1 class="title">⚛️ EQUILÍBRIO QUÍMICO 🧬</h1>
+        
+        <div class="mind-map">
+            <div class="orbital-system">
+                <!-- Órbitas -->
+                <div class="orbit orbit-1"></div>
+                <div class="orbit orbit-2"></div>
+                
+                <!-- Nó central -->
+                <div class="central-node">
+                    ⚖️<br>EQUILÍBRIO<br>QUÍMICO<br>🧬
+                </div>
+            </div>
+            
+            <!-- Ramos principais -->
+            <div class="branch conceito">
+                <h3><span class="icon">🔄</span> Conceito Fundamental</h3>
+                <p><strong>Reações Reversíveis:</strong> A + B ⇌ C + D</p>
+                <p><strong>Estado Dinâmico:</strong> V<sub>direta</sub> = V<sub>inversa</sub></p>
+                <p><strong>Exemplo Clássico:</strong> N₂ + 3H₂ ⇌ 2NH₃</p>
+                <p><em>Sistema em constante movimento molecular</em></p>
+            </div>
+            
+            <div class="branch constante">
+                <h3><span class="icon">📊</span> Constante de Equilíbrio</h3>
+                <div class="formula">Kc = [C]ᶜ[D]ᵈ / [A]ᵃ[B]ᵇ</div>
+                <div class="formula">Kp = Kc(RT)^Δn</div>
+                <p><strong>K >> 1:</strong> Favorece produtos</p>
+                <p><strong>K << 1:</strong> Favorece reagentes</p>
+                <p><strong>K ≈ 1:</strong> Equilíbrio intermediário</p>
+            </div>
+            
+            <div class="branch le-chatelier">
+                <h3><span class="icon">🎯</span> Princípio de Le Chatelier</h3>
+                <p><strong>↑ Concentração:</strong> Sistema compensa</p>
+                <p><strong>↑ Temperatura:</strong> Favorece endotérmica</p>
+                <p><strong>↑ Pressão:</strong> Menor volume molar</p>
+                <p><strong>Catalisador:</strong> Acelera ambos os sentidos</p>
+                <p><em>Resposta inteligente do sistema</em></p>
+            </div>
+            
+            <div class="branch expressao">
+                <h3><span class="icon">🧮</span> Expressão Matemática</h3>
+                <div class="formula">aA + bB ⇌ cC + dD</div>
+                <p><strong>Incluir:</strong> Gases [atm] e aquosos [M]</p>
+                <p><strong>Excluir:</strong> Sólidos e líquidos puros</p>
+                <p><strong>Exemplo:</strong> CaCO₃(s) ⇌ CaO(s) + CO₂(g)</p>
+                <p><em>Atividade = 1 para fases condensadas</em></p>
+            </div>
+            
+            <div class="branch aplicacoes">
+                <h3><span class="icon">🏭</span> Aplicações Tecnológicas</h3>
+                <p><strong>Indústria Química:</strong></p>
+                <p>• Processo Haber-Bosch (NH₃)</p>
+                <p>• Síntese do H₂SO₄ (contato)</p>
+                <p><strong>Sistemas Biológicos:</strong></p>
+                <p>• Transporte de O₂ (hemoglobina)</p>
+                <p>• Sistemas tampão (pH sanguíneo)</p>
+                <p><em>Essencial para a vida e indústria</em></p>
+            </div>
+            
+            <div class="branch graficos">
+                <h3><span class="icon">📈</span> Análise Gráfica</h3>
+                <p><strong>Concentração vs Tempo:</strong></p>
+                <p>• Reagentes: curva decrescente</p>
+                <p>• Produtos: curva crescente</p>
+                <p>• Platô: estado de equilíbrio</p>
+                <p><strong>Perturbações:</strong> Novos patamares</p>
+                <p><em>Visualização da dinâmica molecular</em></p>
+            </div>
+        </div>
+        
+        <button class="graph-button" onclick="showGraph()">
+            🚀 Visualizar Gráfico Quântico
+        </button>
+    </div>
+    
+    <!-- Modal do Gráfico -->
+    <div class="graph-modal" id="graphModal">
+        <div class="graph-content">
+            <button class="close-btn" onclick="closeGraph()">&times;</button>
+            <h2 style="text-align: center; margin-bottom: 25px; color: #00d4ff;">
+                📈 Análise Temporal: Concentração vs Tempo
+            </h2>
+            
+            <div class="graph-container">
+                <!-- Eixos -->
+                <div class="axis x-axis"></div>
+                <div class="axis y-axis"></div>
+                
+                <!-- Linha de equilíbrio -->
+                <div class="equilibrium-line"></div>
+                
+                <!-- Curvas -->
+                <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+                    <!-- Curva dos reagentes (decrescente) -->
+                    <path class="curve curve-reagent" d="M 70 90 Q 220 110 420 190 L 800 190">
+                        <animate attributeName="stroke-dasharray" values="0,1000;1000,0" dur="3s" repeatCount="indefinite"/>
+                    </path>
+                    
+                    <!-- Curva dos produtos (crescente) -->
+                    <path class="curve curve-product" d="M 70 320 Q 220 300 420 220 L 800 220">
+                        <animate attributeName="stroke-dasharray" values="0,1000;1000,0" dur="3s" begin="1s" repeatCount="indefinite"/>
+                    </path>
+                </svg>
+                
+                <!-- Labels -->
+                <div class="label" style="bottom: 25px; right: 50%; transform: translateX(50%);">Tempo (t)</div>
+                <div class="label" style="left: 20px; top: 50%; transform: translateY(-50%) rotate(-90deg);">Concentração [M]</div>
+                <div class="label" style="top: 70px; left: 120px; color: #3498db;">Reagentes [A], [B]</div>
+                <div class="label" style="top: 200px; left: 120px; color: #27ae60;">Produtos [C], [D]</div>
+                <div class="label" style="top: 50px; left: 400px; color: #f39c12;">⚖️ Equilíbrio Dinâmico</div>
+                <div class="label" style="bottom: 100px; right: 120px; background: rgba(0, 212, 255, 0.1); padding: 10px; border-radius: 10px; border: 1px solid rgba(0, 212, 255, 0.3);">
+                    <strong>Estado Quântico:</strong><br>
+                    V<sub>direta</sub> = V<sub>inversa</sub><br>
+                    ΔG = 0 (equilíbrio)
+                </div>
+            </div>
+            
+            <div style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(255, 0, 255, 0.1) 100%); border-radius: 15px; border: 1px solid rgba(0, 212, 255, 0.3);">
+                <h4 style="color: #00d4ff; margin-bottom: 15px;">🔬 Interpretação Molecular:</h4>
+                <ul style="margin-left: 25px; line-height: 1.8; color: #e0e0e0;">
+                    <li><strong>t = 0:</strong> Concentração máxima de reagentes, produtos = 0</li>
+                    <li><strong>Fase transitória:</strong> Velocidades se equilibram gradualmente</li>
+                    <li><strong>Equilíbrio:</strong> Concentrações constantes, reações continuam</li>
+                    <li><strong>Dinâmica molecular:</strong> Movimento perpétuo em escala atômica</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showGraph() {
+            document.getElementById('graphModal').style.display = 'flex';
+        }
+        
+        function closeGraph() {
+            document.getElementById('graphModal').style.display = 'none';
+        }
+        
+        // Fechar modal clicando fora
+        document.getElementById('graphModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeGraph();
+            }
+        });
+        
+        // Animação de entrada espetacular
+        window.addEventListener('load', function() {
+            const branches = document.querySelectorAll('.branch');
+            
+            // Animar ramos com efeito orbital
+            branches.forEach((branch, index) => {
+                branch.style.opacity = '0';
+                branch.style.transform = 'scale(0) rotateY(180deg)';
+                
+                setTimeout(() => {
+                    branch.style.transition = 'all 1.2s cubic-bezier(0.23, 1, 0.320, 1)';
+                    branch.style.opacity = '1';
+                    branch.style.transform = 'scale(1) rotateY(0deg)';
+                }, 800 + (index * 400));
+            });
+            
+            // Efeito de materialização do título
+            const title = document.querySelector('.title');
+            title.style.opacity = '0';
+            title.style.transform = 'scale(0.5)';
+            
+            setTimeout(() => {
+                title.style.transition = 'all 1s cubic-bezier(0.23, 1, 0.320, 1)';
+                title.style.opacity = '1';
+                title.style.transform = 'scale(1)';
+            }, 200);
+        });
+        
+        // Efeito de partículas reativas ao mouse
+        document.addEventListener('mousemove', function(e) {
+            const particles = document.querySelectorAll('.energy-particle');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            particles.forEach((particle, index) => {
+                const delay = index * 0.1;
+                setTimeout(() => {
+                    particle.style.transform = `translate(${mouseX * 20 - 10}px, ${mouseY * 20 - 10}px)`;
+                }, delay * 1000);
+            });
+        });
+        
+        // Efeito hover avançado nos ramos
+        document.querySelectorAll('.branch').forEach(branch => {
+            branch.addEventListener('mouseenter', function() {
+                this.style.zIndex = '25';
+                this.style.transform = 'translateZ(30px) scale(1.08) rotateX(5deg)';
+            });
+            
+            branch.addEventListener('mouseleave', function() {
+                this.style.zIndex = '10';
+                this.style.transform = 'translateZ(0px) scale(1) rotateX(0deg)';
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98238f33d5db6246',t:'MTc1ODM5NDc2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
